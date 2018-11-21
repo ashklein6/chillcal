@@ -4,11 +4,10 @@ import {
   View,
   StyleSheet
 } from 'react-native';
-import {Agenda} from 'react-native-calendars';
 
-export default class LinksScreen extends React.Component {
+export default class UserScreen extends Component {
   static navigationOptions = {
-    title: 'Links',
+    title: 'User',
   };
 
   state = {
@@ -18,7 +17,7 @@ export default class LinksScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello World</Text>
+        <Text>User Screen</Text>
       </View>
     );
   }
@@ -27,6 +26,8 @@ export default class LinksScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#b2f6ff',
   },
 })

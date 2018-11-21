@@ -3,10 +3,47 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../elements/TabBarIcon';
+import FindChillsScreen from '../screens/FindChillsScreen';
+import ChillsScreen from '../screens/ChillsScreen';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import CalendarScreen from '../screens/CalendarScreen';
+import FriendsScreen from '../screens/FriendsScreen';
+import UserScreen from '../screens/UserScreen';
+
+const FindChillsStack = createStackNavigator({
+  FindChills: FindChillsScreen,
+});
+
+FindChillsStack.navigationOptions = {
+  tabBarLabel: 'Find Chills',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios-search'
+          ? `ios-search${focused ? '' : '-outline'}`
+          : 'md-search'
+      }
+    />
+  ),
+};
+
+const ChillsStack = createStackNavigator({
+  Chills: ChillsScreen,
+});
+
+ChillsStack.navigationOptions = {
+  tabBarLabel: 'Chills',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios-calendar'
+          ? `ios-calendar${focused ? '' : '-outline'}`
+          : 'md-calendar'
+      }
+    />
+  ),
+};
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -18,63 +55,50 @@ HomeStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+        Platform.OS === 'ios-home'
+          ? `ios-home${focused ? '' : '-outline'}`
+          : 'md-home'
       }
     />
   ),
 };
 
-const CalendarStack = createStackNavigator({
-  Calendar: CalendarScreen,
+const FriendsStack = createStackNavigator({
+  Friends: FriendsScreen,
 });
 
-CalendarStack.navigationOptions = {
-  tabBarLabel: 'Calendar',
+FriendsStack.navigationOptions = {
+  tabBarLabel: 'Friends',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+        Platform.OS === 'ios-contacts'
+          ? `ios-contacts${focused ? '' : '-outline'}`
+          : 'md-people'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const UserStack = createStackNavigator({
+  User: UserScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+UserStack.navigationOptions = {
+  tabBarLabel: 'User',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios-contact' ? 'ios-contact' : 'md-person'}
     />
   ),
 };
 
 export default createBottomTabNavigator({
+  FindChillsStack,
+  ChillsStack,
   HomeStack,
-  CalendarStack,
-  LinksStack,
-  SettingsStack,
+  FriendsStack,
+  UserStack,
 });
