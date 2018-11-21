@@ -33,7 +33,6 @@ sagaMiddleware.run(rootSaga);
 export default class Index extends Component {
 
   render() {
-    console.log('rendering in index.js');
     return (
       <Provider store={store}>
         <App />
