@@ -1,4 +1,4 @@
-const loginMode = (state = 'login', action) => {
+const loginMode = (state = 'register', action) => {
     switch (action.type) {
       case 'SET_TO_LOGIN_MODE':
         return 'login';
