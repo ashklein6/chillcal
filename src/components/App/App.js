@@ -13,6 +13,8 @@ class App extends React.Component {
   };
 
   render() {
+    console.log('user.id:',this.props.user.id);
+    console.log('loginMode:',this.props.loginMode);
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // made an apiCall function to connect to server
-export default async ({ url, method, data }) => {
+export default async ({ url, method, data, params }) => {
   console.log('in apiCall');
   try {
     // const reqUrl = `http://192.168.1.9:5000${url}`; // home
@@ -11,7 +11,8 @@ export default async ({ url, method, data }) => {
     let response = await axios({
       url: reqUrl,
       method,
-      data
+      data,
+      params
     });
 
     return response.data;

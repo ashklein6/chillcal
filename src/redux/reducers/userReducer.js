@@ -1,6 +1,7 @@
 const userReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_USER':
+    console.log('in SET_USER, action:',action);
       return action.payload;
     case 'UNSET_USER':
       return {};
