@@ -1,5 +1,5 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import axios from 'axios';
+import apiCall from '../../../apiCall';
 
 // worker Saga: will be fired on "LOGIN" actions
 function* loginUser(action) {
@@ -15,8 +15,8 @@ function* loginUser(action) {
     // send the action.payload as the body
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield axios.post('api/user/login', action.payload, config);
-    
+    yield apiCall({method: 'POST', url: '/api/user/login', data: action.payload, params: config});
+
     // after the user has logged in
     // get the user information from the server
     yield put({type: 'FETCH_USER'});
@@ -47,7 +47,7 @@ function* logoutUser(action) {
     // allow the server session to recognize the user
     // when the server recognizes the user session
     // it will end the session
-    yield axios.post('api/user/logout', config);
+    yield apiCall({method: 'POST', url: '/api/user/logout', params: config});
 
     // now that the session has ended on the server
     // remove the client-side user object to let

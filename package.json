@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "expo start",
+    "client": "expo start",
+    "server": "nodemon --watch server server/server.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject"
