@@ -1,11 +1,13 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from '../navigation/AppNavigator';
 import LoginScreen from '../Login/LoginScreen';
 import RegisterScreen from '../Register/RegisterScreen';
 
-export default class App extends React.Component {
+
+class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
@@ -19,12 +21,24 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
+    } else if (this.props.user.id) {
+        return(
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        );
+    } else if (this.props.loginMode === 'login') {
+      return(
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <LoginScreen />
+        </View>
+      );
     } else {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {/* <AppNavigator /> */}
-          {/* <LoginScreen /> */}
           <RegisterScreen />
         </View>
       );
@@ -58,9 +72,21 @@ export default class App extends React.Component {
   };
 }
 
+// Pull the user and loginMode from reduxState:
+// Could also write as:
+// const mapReduxStateToProps = ({ user, loginMode }) => ({ user, loginMode });
+const mapReduxStateToProps = (state) => {
+  return {
+    user: state.user,
+    loginMode: state.loginMode
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
 });
+
+export default connect(mapReduxStateToProps)(App);
