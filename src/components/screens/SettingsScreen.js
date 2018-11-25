@@ -3,25 +3,27 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
+  Button
 } from 'react-native';
 import { connect } from 'react-redux';
 
-class UserScreen extends Component {
-  static navigationOptions = ({ navigation, screenProps }) => ({
-    title: 'User',
-    headerRight: <Button title='Settings' onPress={()=>{navigation.navigate('Settings')}} />
-  });
-  
+class SettingsScreen extends Component {
+  static navigationOptions = {
+    title: 'Settings',
+  };
+
   state = {
     items: {}
   };
 
   render() {
-    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text>User Screen</Text>
+        <Text>Settings Screen</Text>
+        <Button 
+          onPress = {() => this.props.dispatch({ type: 'LOGOUT' })}
+          title = 'Log Out'
+        />
       </View>
     );
   }
@@ -40,4 +42,4 @@ const mapReduxStateToProps = reduxState => (
   {reduxState}
 );
 
-export default connect(mapReduxStateToProps)(UserScreen)
+export default connect(mapReduxStateToProps)(SettingsScreen)
