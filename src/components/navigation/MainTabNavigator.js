@@ -101,4 +101,6 @@ export default createBottomTabNavigator({
   HomeStack,
   FriendsStack,
   UserStack,
-});
+  },
+  { initialRouteName: 'HomeStack' }
+);
