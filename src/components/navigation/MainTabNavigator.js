@@ -8,6 +8,7 @@ import ChillsScreen from '../screens/ChillsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import UserScreen from '../screens/UserScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const FindChillsStack = createStackNavigator({
   FindChills: FindChillsScreen,
@@ -83,7 +84,13 @@ FriendsStack.navigationOptions = {
 
 const UserStack = createStackNavigator({
   User: UserScreen,
-});
+  Settings: SettingsScreen
+},
+{ 
+  initialRouteName: 'User',
+  lazy: true
+}
+);
 
 UserStack.navigationOptions = {
   tabBarLabel: 'User',
@@ -101,4 +108,6 @@ export default createBottomTabNavigator({
   HomeStack,
   FriendsStack,
   UserStack,
-});
+  },
+  { initialRouteName: 'HomeStack' }
+);
