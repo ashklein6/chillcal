@@ -4,6 +4,8 @@ import {
   View,
   StyleSheet
 } from 'react-native';
+import FriendsList from '../Friends/FriendsList';
+import PendingFriends from '../Friends/PendingFriends';
 
 export default class FriendsScreen extends Component {
   static navigationOptions = {
@@ -17,7 +19,11 @@ export default class FriendsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Friends Screen</Text>
+        <Text>ADD A CONNECTION</Text>
+        <Text>PENDING CONNECTIONS</Text>
+        <PendingFriends />
+        <Text>YOUR CONNECTIONS</Text>
+        <FriendsList />
       </View>
     );
   }
