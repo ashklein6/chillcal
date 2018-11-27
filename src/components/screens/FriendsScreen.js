@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   SectionList,
+  RefreshControl
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
@@ -14,41 +15,22 @@ class FriendsScreen extends Component {
   };
 
   state = {
-
-  };
-
-  friendsList = () => {
-    console.log('friends.friends:',this.props.reduxState.friends.friends)
-    if (this.props.reduxState.friends.friends = []) {
-        return [{username: 'loading...'}]
-    }
-    return this.props.reduxState.friends.friends;
+    
   };
 
   getFriends = () => {
-    console.log('in getFriends');
     this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
   };
 
   getPending = () => {
-    console.log('in getFriends');
     this.props.dispatch({ type: 'FETCH_PENDING', payload: {id: this.props.reduxState.user.id} });
   }
 
-  keyExtractor = (item, index) => item.username;
+  keyExtractor = ({section}) => section.title;
 
-  keyExtractorFriends = (item, index) => 'friends' + item.username;
-
-  keyExtractorPending = (item, index) => 'pending' + item.username;
-
-  renderItem = ({ item }) => (
-    <ListItem 
-        // key={item.id}
-        title={item.username + item.id}
-        // leftAvatar={{ source: {uri: item.avatar_url }}}
-        // onPress={() => navigate('AddFriend')}
-    />
-  );
+  onRefresh = () => {
+    this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
+  }
 
   renderSectionHeader = ({ section }) => (
     <View style={styles.sectionContainer}>
@@ -62,6 +44,8 @@ class FriendsScreen extends Component {
   }
 
   render() {
+    const {navigate} = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <SectionList 
@@ -69,26 +53,52 @@ class FriendsScreen extends Component {
               { 
                 title: 'ADD A CONNECTION',
                 data: [{ username: 'Add friend by username', id: 0 }],
-                key: this.keyExtractor,
-                renderItem: this.renderItem,
+                keyExtractor: (item, index) => item + index,
+                renderItem: ({ item }) => (
+                  <ListItem 
+                    key={'add-' + item.id}
+                    title={item.username}
+                    // leftAvatar={{ source: {uri: item.avatar_url }}}
+                    // onPress={() => navigate('AddFriend')}
+                    onPress={() => navigate('AddFriend')}
+                    style={styles.listItem}
+                />)
               },
               { 
                 title: 'PENDING CONNECTIONS',
                 data: this.props.reduxState.friends.pending,
-                key: this.keyExtractorPending,
-                renderItem: this.renderItem,
+                keyExtractor: (item, index) => item + index,
+                renderItem: ({ item }) => (
+                  <ListItem 
+                    key={'friends-' + item.id}
+                    title={item.username}
+                    // leftAvatar={{ source: {uri: item.avatar_url }}}
+                    onPress={() => navigate('AddFriend')}
+                    style={styles.listItem}
+                    chevron
+                  />)
               },
               {
                 title: 'YOUR CONNECTIONS',
                 data: this.props.reduxState.friends.friends,
-                key: this.keyExtractorFriends,
-                renderItem: this.renderItem,
+                keyExtractor: (item, index) => item + index,
+                renderItem: ({ item }) => (
+                  <ListItem 
+                    key={'pending-' + item.id}
+                    title={item.username}
+                    // leftAvatar={{ source: {uri: item.avatar_url }}}
+                    onPress={() => navigate('AddFriend')}
+                    style={styles.listItem}
+                  />)
               }
-
           ]}
-          key = {this.keyExtractor}
-          // renderItem = {this.renderItem}
           renderSectionHeader = {this.renderSectionHeader}
+          refreshControl = {
+            <RefreshControl
+              refreshing={this.props.reduxState.friends.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
         />
       </View>
     );
@@ -98,6 +108,9 @@ class FriendsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#efefef',
+  },
+  listItem: {
     backgroundColor: 'white',
   },
   sectionContainer: {

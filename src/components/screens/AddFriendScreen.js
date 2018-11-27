@@ -10,7 +10,7 @@ import { ListItem } from 'react-native-elements';
 
 class AddFriendScreen extends Component {
   static navigationOptions = {
-    title: 'Friends',
+    title: 'Add Friend',
   };
 
   state = {

@@ -67,12 +67,12 @@ HomeStack.navigationOptions = {
 
 const FriendsStack = createStackNavigator({
     Friends: FriendsScreen,
-    // AddFriend: AddFriendScreen
+    AddFriend: AddFriendScreen
   },
-  // { 
-  //   initialRouteName: 'Friends',
-  //   lazy: true
-  // }
+  { 
+    initialRouteName: 'Friends',
+    lazy: true
+  }
 );
 
 FriendsStack.navigationOptions = {
