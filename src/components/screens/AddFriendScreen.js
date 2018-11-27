@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-class FriendsScreen extends Component {
+class AddFriendScreen extends Component {
   static navigationOptions = {
     title: 'Friends',
   };
@@ -43,10 +43,9 @@ class FriendsScreen extends Component {
 
   renderItem = ({ item }) => (
     <ListItem 
-        // key={item.id}
-        title={item.username + item.id}
+        key={item.id}
+        title={item.username}
         // leftAvatar={{ source: {uri: item.avatar_url }}}
-        // onPress={() => navigate('AddFriend')}
     />
   );
 
@@ -84,7 +83,6 @@ class FriendsScreen extends Component {
                 key: this.keyExtractorFriends,
                 renderItem: this.renderItem,
               }
-
           ]}
           key = {this.keyExtractor}
           // renderItem = {this.renderItem}
@@ -120,4 +118,4 @@ const mapReduxStateToProps = reduxState => (
   {reduxState}
 );
 
-export default connect(mapReduxStateToProps)(FriendsScreen);
+export default connect(mapReduxStateToProps)(AddFriendScreen);

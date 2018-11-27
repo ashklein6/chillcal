@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import UserScreen from '../screens/UserScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import AddFriendScreen from '../screens/AddFriendScreen';
 
 const FindChillsStack = createStackNavigator({
   FindChills: FindChillsScreen,
@@ -65,8 +66,14 @@ HomeStack.navigationOptions = {
 };
 
 const FriendsStack = createStackNavigator({
-  Friends: FriendsScreen,
-});
+    Friends: FriendsScreen,
+    // AddFriend: AddFriendScreen
+  },
+  // { 
+  //   initialRouteName: 'Friends',
+  //   lazy: true
+  // }
+);
 
 FriendsStack.navigationOptions = {
   tabBarLabel: 'Friends',
@@ -83,13 +90,13 @@ FriendsStack.navigationOptions = {
 };
 
 const UserStack = createStackNavigator({
-  User: UserScreen,
-  Settings: SettingsScreen
-},
-{ 
-  initialRouteName: 'User',
-  lazy: true
-}
+    User: UserScreen,
+    Settings: SettingsScreen
+  },
+  { 
+    initialRouteName: 'User',
+    lazy: true
+  }
 );
 
 UserStack.navigationOptions = {
