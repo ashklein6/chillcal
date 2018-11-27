@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, List, FlatList, ListItem } from 'react-native';
+import { Text, View, StyleSheet, Button, List, FlatList, SectionList } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 class FriendsList extends Component {
@@ -26,14 +27,20 @@ class FriendsList extends Component {
         this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
     };
 
-    keyExtractor = (item, index) => String(index);
+    keyExtractor = (item, index) => item.username;
 
     renderItem = ({ item }) => (
-        // <ListItem 
-        //     title={item.username}
-        //     // leftAvatar={{ source: {uri: item.avatar_url }}}
-        // />
-        <Text>{item.username}</Text>
+        <ListItem 
+            key={item.id}
+            title={item.username}
+            // leftAvatar={{ source: {uri: item.avatar_url }}}
+        />
+    );
+
+    renderSectionHeader = ({ section }) => (
+        <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+        </View>
     );
 
     componentWillMount() {
@@ -43,10 +50,16 @@ class FriendsList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-            data={this.state.friends}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.renderItem}
+      
+        <SectionList 
+            sections = {[
+                {   title: 'YOUR CONNECTIONS',
+                    data: this.props.reduxState.friends.friends,
+                }
+            ]}
+            key = {this.keyExtractor}
+            renderItem = {this.renderItem}
+            renderSectionHeader = {this.renderSectionHeader}
         />
         <Text>{JSON.stringify(this.props.reduxState.friends.friends)}</Text>
 
@@ -58,8 +71,23 @@ class FriendsList extends Component {
 
 const styles = StyleSheet.create({
     container: {
-
-    },
+        flex: 1,
+        backgroundColor: 'white',
+      },
+      sectionContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(0, 0, 0, 0.12)',
+        backgroundColor: '#efefef',
+      },
+      sectionTitle: {
+        color: 'black',
+        fontSize: 14,
+        marginBottom: 8,
+        marginLeft: 16,
+        marginRight: 16,
+        marginTop: 24,
+        opacity: 0.8,
+      },
 })
 
 const mapReduxStateToProps = reduxState => (

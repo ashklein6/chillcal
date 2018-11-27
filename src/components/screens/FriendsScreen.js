@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  SectionList,
 } from 'react-native';
+import { ListItem } from 'react-native';
 import FriendsList from '../Friends/FriendsList';
 import PendingFriends from '../Friends/PendingFriends';
 
-export default class FriendsScreen extends Component {
+class FriendsScreen extends Component {
   static navigationOptions = {
     title: 'Friends',
   };
@@ -38,4 +41,8 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapReduxStateToProps = reduxState => (
+  {reduxState}
+);
 
+export default connect(mapReduxStateToProps)(FriendsScreen);
