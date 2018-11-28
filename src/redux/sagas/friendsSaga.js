@@ -34,16 +34,17 @@ function* fetchPending(action) {
     try {
       // passes the current user id to get their connections
       console.log('action.payload of refreshFriends:');
+      let userId = action.payload.id;
 
       // update status to refreshing
       yield put({ type: 'REFRESH_FRIENDS_START'})
 
       // get friends and set in reduxState
-      let friends = yield apiCall({ method: 'GET', url: `/api/friends/${action.payload.id}` })
+      let friends = yield apiCall({ method: 'GET', url: `/api/friends/${userId}` })
       yield put({ type: 'SET_FRIENDS', payload: friends });
 
       // get pending friends and set in reduxState
-      let pendingFriends = yield apiCall({ method: 'GET', url: `/api/friends/pending/${action.payload.id}` })
+      let pendingFriends = yield apiCall({ method: 'GET', url: `/api/friends/pending/${userId}` })
       yield put({ type: 'SET_PENDING', payload: pendingFriends });
 
       // update status to indicate refreshing has completed

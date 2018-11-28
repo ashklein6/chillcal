@@ -5,8 +5,9 @@ import {
   View,
   StyleSheet,
   SectionList,
+  RefreshControl
 } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, SearchBar } from 'react-native-elements';
 
 class AddFriendScreen extends Component {
   static navigationOptions = {
@@ -14,79 +15,79 @@ class AddFriendScreen extends Component {
   };
 
   state = {
-
+    search: ''
   };
 
-  friendsList = () => {
-    console.log('friends.friends:',this.props.reduxState.friends.friends)
-    if (this.props.reduxState.friends.friends = []) {
-        return [{username: 'loading...'}]
-    }
-    return this.props.reduxState.friends.friends;
+  getFriendsSearch = () => {
+    this.props.dispatch({ type: 'FETCH_FRIENDS_SEARCH', payload: {id: this.props.reduxState.user.id} });
   };
 
-  getFriends = () => {
-    console.log('in getFriends');
-    this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
-  };
-
-  getPending = () => {
-    console.log('in getFriends');
-    this.props.dispatch({ type: 'FETCH_PENDING', payload: {id: this.props.reduxState.user.id} });
+  handleChange = (event) => {
+    this.setState({ ...this.state, search: event.target.value })
   }
 
-  keyExtractor = (item, index) => item.username;
+  handleClear = () => {
+    this.setState({ ...this.state, search: event.target.value })
+    this.props.dispatch({ type: 'CLEAR_FRIENDS_SEARCH' });
+  }
 
-  keyExtractorFriends = (item, index) => 'friends' + item.username;
+  keyExtractor = ({section}) => section.title;
 
-  keyExtractorPending = (item, index) => 'pending' + item.username;
+  onRefresh = () => {
+    this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
+  }
 
-  renderItem = ({ item }) => (
-    <ListItem 
-        key={item.id}
-        title={item.username}
-        // leftAvatar={{ source: {uri: item.avatar_url }}}
-    />
-  );
-
-  renderSectionHeader = ({ section }) => (
-    <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>{section.title}</Text>
-    </View>
-  );
-
-  componentWillMount() {
-    this.getFriends();
-    this.getPending();
+  renderNoContent = ({ section }) => {
+    if (section.data.length == 0) {
+      return (<ListItem 
+                key={'search-0'}
+                title='No results.'
+                // leftAvatar={{ source: {uri: item.avatar_url }}}
+                containerStyle={styles.listItem}
+                hideChevron
+              />)
+    };
+    return null;
   }
 
   render() {
+    const {navigate} = this.props.navigation;
+
     return (
       <View style={styles.container}>
+        <SearchBar
+          lightTheme
+          onChangeText={() => this.handleChange}
+          onClearText={() => this.handleClear}
+          icon={{ type: 'font-awesome', name: 'search' }}
+          placeholder='Type Here...' 
+        />
         <SectionList 
-          sections = {[
+          sections = {
+            [
               { 
-                title: 'ADD A CONNECTION',
-                data: [{ username: 'Add friend by username', id: 0 }],
-                key: this.keyExtractor,
-                renderItem: this.renderItem,
-              },
-              { 
-                title: 'PENDING CONNECTIONS',
-                data: this.props.reduxState.friends.pending,
-                key: this.keyExtractorPending,
-                renderItem: this.renderItem,
-              },
-              {
-                title: 'YOUR CONNECTIONS',
-                data: this.props.reduxState.friends.friends,
-                key: this.keyExtractorFriends,
-                renderItem: this.renderItem,
+                title: 'ADD FRIEND SEARCH RESULTS',
+                data: this.props.reduxState.friends.search,
+                keyExtractor: (item, index) => item + index,
+                renderItem: ({ item }) => (
+                  <ListItem 
+                    key={'add-' + item.id}
+                    title={item.username}
+                    // leftAvatar={{ source: {uri: item.avatar_url }}}
+                    // onPress={() => navigate('AddFriend')}
+                    containerStyle={styles.listItem}
+                />)
               }
-          ]}
-          key = {this.keyExtractor}
-          // renderItem = {this.renderItem}
-          renderSectionHeader = {this.renderSectionHeader}
+            ]
+          }
+        //   renderSectionHeader = {this.renderSectionHeader}
+          refreshControl = {
+            <RefreshControl
+              refreshing={this.props.reduxState.friends.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
+          renderSectionFooter = {this.renderNoContent}
         />
       </View>
     );
@@ -96,6 +97,9 @@ class AddFriendScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#efefef',
+  },
+  listItem: {
     backgroundColor: 'white',
   },
   sectionContainer: {

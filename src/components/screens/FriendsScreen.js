@@ -32,6 +32,27 @@ class FriendsScreen extends Component {
     this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
   }
 
+  renderNoContent = ({ section }) => {
+    if (section.data.length == 0 && section.title == 'PENDING CONNECTIONS') {
+      return (<ListItem 
+                key={'pending-0'}
+                title='You have no pending connections.'
+                // leftAvatar={{ source: {uri: item.avatar_url }}}
+                containerStyle={styles.listItem}
+                hideChevron
+              />)
+    } else if (section.data.length == 0 && section.title == 'YOUR CONNECTIONS') {
+      return (<ListItem 
+        key={'friends-0'}
+        title='You have no friends.'
+        // leftAvatar={{ source: {uri: item.avatar_url }}}
+        containerStyle={styles.listItem}
+        hideChevron
+      />)
+    }
+    return null;
+  }
+
   renderSectionHeader = ({ section }) => (
     <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>{section.title}</Text>
@@ -49,7 +70,8 @@ class FriendsScreen extends Component {
     return (
       <View style={styles.container}>
         <SectionList 
-          sections = {[
+          sections = {
+            [
               { 
                 title: 'ADD A CONNECTION',
                 data: [{ username: 'Add friend by username', id: 0 }],
@@ -61,7 +83,7 @@ class FriendsScreen extends Component {
                     // leftAvatar={{ source: {uri: item.avatar_url }}}
                     // onPress={() => navigate('AddFriend')}
                     onPress={() => navigate('AddFriend')}
-                    style={styles.listItem}
+                    containerStyle={styles.listItem}
                 />)
               },
               { 
@@ -70,12 +92,11 @@ class FriendsScreen extends Component {
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'friends-' + item.id}
+                    key={'pending-' + item.id}
                     title={item.username}
                     // leftAvatar={{ source: {uri: item.avatar_url }}}
                     onPress={() => navigate('AddFriend')}
-                    style={styles.listItem}
-                    chevron
+                    containerStyle={styles.listItem}
                   />)
               },
               {
@@ -84,14 +105,15 @@ class FriendsScreen extends Component {
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'pending-' + item.id}
+                    key={'friends-' + item.id}
                     title={item.username}
-                    // leftAvatar={{ source: {uri: item.avatar_url }}}
+                    // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
                     onPress={() => navigate('AddFriend')}
-                    style={styles.listItem}
+                    containerStyle={styles.listItem}
                   />)
               }
-          ]}
+            ]
+          }
           renderSectionHeader = {this.renderSectionHeader}
           refreshControl = {
             <RefreshControl
@@ -99,6 +121,7 @@ class FriendsScreen extends Component {
               onRefresh={this.onRefresh}
             />
           }
+          renderSectionFooter = {this.renderNoContent}
         />
       </View>
     );
