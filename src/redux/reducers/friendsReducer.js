@@ -9,6 +9,10 @@ const friendsReducer = (state={ friends: [], pending: [], refreshing: false, sea
         // to store pending friends list
         console.log('in SET_PENDING, action.payload:',action.payload);
         return {...state, pending: action.payload}
+      case 'SET_FRIENDS_SEARCH':
+        // to store search results of users on Add Friends screen
+        console.log('in SET_FRIENDS_SEARCH, action.payload:',action.payload);
+        return {...state, search: action.payload}
       case 'REFRESH_FRIENDS_START':
         // to indicate that friends and pending friends lists are being updated
         console.log('in REFRESH_FRIENDS_START');

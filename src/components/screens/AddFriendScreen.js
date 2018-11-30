@@ -22,12 +22,14 @@ class AddFriendScreen extends Component {
     this.props.dispatch({ type: 'FETCH_FRIENDS_SEARCH', payload: {id: this.props.reduxState.user.id} });
   };
 
-  handleChange = (event) => {
-    this.setState({ ...this.state, search: event.target.value })
+  handleChange = (text) => {
+    this.setState({ ...this.state, search: text })
+    console.log('add friend search:',this.state.search);
+    this.props.dispatch({ type: 'FETCH_FRIENDS_SEARCH', payload: {search: text, user: this.props.reduxState.user.id} });
   }
 
   handleClear = () => {
-    this.setState({ ...this.state, search: event.target.value })
+    this.setState({ ...this.state, search: '' });
     this.props.dispatch({ type: 'CLEAR_FRIENDS_SEARCH' });
   }
 
@@ -57,7 +59,8 @@ class AddFriendScreen extends Component {
       <View style={styles.container}>
         <SearchBar
           lightTheme
-          onChangeText={() => this.handleChange}
+          round
+          onChangeText={(text) => this.handleChange(text)}
           onClearText={() => this.handleClear}
           icon={{ type: 'font-awesome', name: 'search' }}
           placeholder='Type Here...' 
