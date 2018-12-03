@@ -131,7 +131,7 @@ class FriendsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#efefef',
+    backgroundColor: '#b2f6ff',
   },
   listItem: {
     backgroundColor: 'white',
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.12)',
-    backgroundColor: '#efefef',
+    backgroundColor: '#b2f6ff',
   },
   sectionTitle: {
     color: 'black',

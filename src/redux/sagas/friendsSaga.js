@@ -61,12 +61,10 @@ function* fetchPending(action) {
       yield put({ type: 'REFRESH_FRIENDS_START'})
 
       // get friends and set in reduxState
-      let friends = yield apiCall({ method: 'GET', url: `/api/friends/${userId}` })
-      yield put({ type: 'SET_FRIENDS', payload: friends });
+      yield put({ type: 'FETCH_FRIENDS', payload: action.payload });
 
       // get pending friends and set in reduxState
-      let pendingFriends = yield apiCall({ method: 'GET', url: `/api/friends/pending/${userId}` })
-      yield put({ type: 'SET_PENDING', payload: pendingFriends });
+      yield put({ type: 'FETCH_PENDING', payload: action.payload });
 
       // update status to indicate refreshing has completed
       yield put({ type: 'REFRESH_FRIENDS_COMPLETE'})

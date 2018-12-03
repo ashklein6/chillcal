@@ -6,9 +6,9 @@ export default async ({ url, method, data, params }) => {
   console.log('params', params);
 
   try {
-    // const reqUrl = `http://192.168.1.9:5000${url}`; // home
-    // const reqUrl = `http://172.16.21.223:5000${url}`; // coffee shop
-    const reqUrl = `http://10.100.100.122:5000${url}`; // prime
+    const reqUrl = `http://192.168.1.9:5000${url}`; // home
+    // const reqUrl = `http://10.226.90.29:5000${url}`; // coffee shop
+    // const reqUrl = `http://10.100.100.122:5000${url}`; // prime
     
     let response = await axios({
       url: reqUrl,
