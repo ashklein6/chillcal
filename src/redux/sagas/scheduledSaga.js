@@ -26,13 +26,8 @@ function* fetchScheduled(action) {
       // update status to refreshing
       yield put({ type: 'REFRESH_SCHEDULED_START'})
 
-      // get friends and set in reduxState
-      let friends = yield apiCall({ method: 'GET', url: `/api/friends/list/${userId}` })
-      yield put({ type: 'SET_FRIENDS', payload: friends });
-
-      // get pending friends and set in reduxState
-      let pendingFriends = yield apiCall({ method: 'GET', url: `/api/friends/pending/${userId}` })
-      yield put({ type: 'SET_PENDING', payload: pendingFriends });
+      // get scheduled chills and set in reduxState
+      yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
 
       // update status to indicate refreshing has completed
       yield put({ type: 'REFRESH_SCHEDULED_COMPLETE'})
@@ -43,9 +38,9 @@ function* fetchScheduled(action) {
     }
   }
 
-function* friendsSaga() {
+function* scheduledSaga() {
   yield takeLatest('FETCH_SCHEDULED_CHILLS', fetchScheduled);
   yield takeLatest('REFRESH_SCHEDULED_CHILLS', refreshScheduled);
 }
 
-export default friendsSaga;
+export default scheduledSaga;

@@ -62,7 +62,7 @@ class RegisterForm extends Component {
             style={styles.input}
             placeholder="password"
             placeholderTextColor="rgba(255,255,255,0.7)"
-            // secureTextEntry
+            secureTextEntry
             returnKeyType="go"
             onChangeText={(input) => this.handleInputChangeFor('password',input)}
             autoCapitalize="none"

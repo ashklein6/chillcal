@@ -8,49 +8,45 @@ import {
   RefreshControl
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import moment from 'moment';
 
 class ChillsScreen extends Component {
   static navigationOptions = {
-    title: 'Friends',
+    title: 'Chills',
   };
 
   state = {
     chills: [{title: 'December 1st - 5:00 PM - 6:45 PM', subtitle: 'Happy Hour with Alex'}, {title: 'December 4th - 11:15 PM - 1:45 AM', subtitle: 'Getting Drunk with Kaitlyn'}, {title: 'December 5th - 11:15 AM - 1:00 PM', subtitle: 'Hangover Brunch with Kaitlyn'}]
   };
 
-  getFriends = () => {
-    this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
+  getScheduledChills = () => {
+    this.props.dispatch({ type: 'FETCH_SCHEDULED_CHILLS', payload: {id: this.props.reduxState.user.id} });
   };
-
-  getPending = () => {
-    this.props.dispatch({ type: 'FETCH_PENDING', payload: {id: this.props.reduxState.user.id} });
-  }
 
   keyExtractor = ({section}) => section.title;
 
   onRefresh = () => {
-    this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
+    this.props.dispatch({ type: 'REFRESH_SCHEDULED_CHILLS', payload: {id: this.props.reduxState.user.id} })
+  }
+
+  prepDate = (item) => {
+    if (moment(item.start_time).format("MMM Do YY") == moment(item.end_time).format("MMM Do YY")) {
+      return ( moment(item.start_time).format('dddd[,] MMM Do h:mm A') + ' - ' + moment(item.end_time).format('h:mm A') )
+    } else {
+      return ( moment(item.start_time).format('dddd[,] MMM Do h:mm A') + ' - \n' + moment(item.end_time).format('dddd[,] MMM Do h:mm A') )
+    }
   }
 
   renderNoContent = ({ section }) => {
-    if (section.data.length == 0 && section.title == 'PENDING CONNECTIONS') {
+    if (section.data.length == 0) {
       return (<ListItem 
-                key={'pending-0'}
-                title='You have no pending connections.'
-                // leftAvatar={{ source: {uri: item.avatar_url }}}
-                containerStyle={styles.listItem}
-                hideChevron
-              />)
-    } else if (section.data.length == 0 && section.title == 'YOUR CONNECTIONS') {
-      return (<ListItem 
-        key={'friends-0'}
-        title='You have no friends.'
+        key={'scheduled-0'}
+        title='You have no scheduled chills.'
         // leftAvatar={{ source: {uri: item.avatar_url }}}
         containerStyle={styles.listItem}
         hideChevron
       />)
     }
-    return null;
   }
 
   renderSectionHeader = ({ section }) => (
@@ -60,8 +56,7 @@ class ChillsScreen extends Component {
   );
 
   componentWillMount() {
-    this.getFriends();
-    this.getPending();
+    this.getScheduledChills();
   }
 
   render() {
@@ -72,45 +67,21 @@ class ChillsScreen extends Component {
         <SectionList 
           sections = {
             [
-              // { 
-              //   title: 'ADD A CONNECTION',
-              //   data: [{ username: 'Add friend by username', id: 0 }],
-              //   keyExtractor: (item, index) => item + index,
-              //   renderItem: ({ item }) => (
-              //     <ListItem 
-              //       key={'add-' + item.id}
-              //       title={item.username}
-              //       // leftAvatar={{ source: {uri: item.avatar_url }}}
-              //       // onPress={() => navigate('AddFriend')}
-              //       onPress={() => navigate('AddFriend')}
-              //       containerStyle={styles.listItem}
-              //   />)
-              // },
-              // { 
-              //   title: 'PENDING CONNECTIONS',
-              //   data: this.props.reduxState.friends.pending,
-              //   keyExtractor: (item, index) => item + index,
-              //   renderItem: ({ item }) => (
-              //     <ListItem 
-              //       key={'pending-' + item.id}
-              //       title={item.username}
-              //       // leftAvatar={{ source: {uri: item.avatar_url }}}
-              //       onPress={() => navigate('AddFriend')}
-              //       containerStyle={styles.listItem}
-              //     />)
-              // },
               {
                 title: 'SCHEDULED CHILLS',
-                data: this.state.chills,
+                data: this.props.reduxState.scheduled.scheduled,
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
                     key={'friends-' + item.id}
-                    title={item.title}
-                    subtitle={item.subtitle}
+                    // title={moment(item.start_time).format('dddd[,] MMM Do h:mm A')}
+                    title={this.prepDate(item)}
+                    subtitle={item.details + ' with ' + item.friend_username}
                     // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
-                    onPress={() => navigate('AddFriend')}
+                    onPress={() => navigate('Session', {item: item})}
                     containerStyle={styles.listItem}
+                    titleNumberOfLines={2}
+                    subtitleNumberOfLines={4}
                   />)
               }
             ]
@@ -118,7 +89,7 @@ class ChillsScreen extends Component {
           renderSectionHeader = {this.renderSectionHeader}
           refreshControl = {
             <RefreshControl
-              refreshing={this.props.reduxState.friends.refreshing}
+              refreshing={this.props.reduxState.scheduled.refreshing}
               onRefresh={this.onRefresh}
             />
           }

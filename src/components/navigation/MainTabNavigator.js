@@ -10,10 +10,17 @@ import FriendsScreen from '../screens/FriendsScreen';
 import UserScreen from '../screens/UserScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AddFriendScreen from '../screens/AddFriendScreen';
+import SessionScreen from '../screens/SessionScreen';
 
 const FindChillsStack = createStackNavigator({
-  FindChills: FindChillsScreen,
-});
+    FindChills: FindChillsScreen,
+    Session: SessionScreen,
+  },
+  { 
+    initialRouteName: 'FindChills',
+    lazy: true
+  }
+);
 
 FindChillsStack.navigationOptions = {
   tabBarLabel: 'Find Chills',
@@ -30,8 +37,14 @@ FindChillsStack.navigationOptions = {
 };
 
 const ChillsStack = createStackNavigator({
-  Chills: ChillsScreen,
-});
+    Chills: ChillsScreen,
+    Session: SessionScreen,
+  },
+  { 
+    initialRouteName: 'Chills',
+    lazy: true
+  }
+);
 
 ChillsStack.navigationOptions = {
   tabBarLabel: 'Chills',
