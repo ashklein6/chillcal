@@ -12,6 +12,10 @@ class App extends React.Component {
     isLoadingComplete: false,
   };
 
+  componentDidMount() {
+    this.props.dispatch({ type: 'FETCH_USER' });
+  }
+
   render() {
     console.log('user.id:',this.props.user.id);
     console.log('loginMode:',this.props.loginMode);

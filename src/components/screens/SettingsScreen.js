@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  Button
 } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class HomeScreen extends Component {
+class SettingsScreen extends Component {
   static navigationOptions = {
-    title: 'ChillCal',
+    title: 'Settings',
   };
 
   state = {
@@ -17,7 +19,11 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Home Screen</Text>
+        <Text>Settings Screen</Text>
+        <Button 
+          onPress = {() => this.props.dispatch({ type: 'LOGOUT' })}
+          title = 'Log Out'
+        />
       </View>
     );
   }
@@ -32,4 +38,8 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapReduxStateToProps = reduxState => (
+  {reduxState}
+);
 
+export default connect(mapReduxStateToProps)(SettingsScreen)

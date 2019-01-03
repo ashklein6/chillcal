@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  Button,
 } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class UserScreen extends Component {
-  static navigationOptions = {
+class UserScreen extends Component {
+  static navigationOptions = ({ navigation, screenProps }) => ({
     title: 'User',
-  };
-
+    headerRight: <Button title='Settings' onPress={()=>{navigation.navigate('Settings')}} />
+  });
+  
   state = {
     items: {}
   };
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text>User Screen</Text>
@@ -32,4 +36,8 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapReduxStateToProps = reduxState => (
+  {reduxState}
+);
 
+export default connect(mapReduxStateToProps)(UserScreen)
