@@ -11,45 +11,33 @@ import { ListItem } from 'react-native-elements';
 
 class FindChillsScreen extends Component {
   static navigationOptions = {
-    title: 'Friends',
+    title: 'FindChills',
   };
 
   state = {
     chills: [{title: 'November 30th - 8:00 AM - 8:45AM', subtitle: 'Coffee with Lauren'}, {title: 'December 2nd - 11:15 AM - 11:45 AM', subtitle: 'Lunch with Kaitlyn'}]
   };
 
-  getFriends = () => {
-    this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
+  getAvailableChills = () => {
+    this.props.dispatch({ type: 'FETCH_AVAILABLE_CHILLS', payload: {id: this.props.reduxState.user.id} });
   };
-
-  getPending = () => {
-    this.props.dispatch({ type: 'FETCH_PENDING', payload: {id: this.props.reduxState.user.id} });
-  }
 
   keyExtractor = ({section}) => section.title;
 
   onRefresh = () => {
-    this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
+    this.props.dispatch({ type: 'REFRESH_AVAILABLE_CHILLS', payload: {id: this.props.reduxState.user.id} })
   }
 
   renderNoContent = ({ section }) => {
-    if (section.data.length == 0 && section.title == 'PENDING CONNECTIONS') {
+    if (section.data.length == 0 && section.title == 'AVAILABLE CHILLS') {
       return (<ListItem 
                 key={'pending-0'}
-                title='You have no pending connections.'
+                title='You have no available chills.'
                 // leftAvatar={{ source: {uri: item.avatar_url }}}
                 containerStyle={styles.listItem}
                 hideChevron
               />)
-    } else if (section.data.length == 0 && section.title == 'YOUR CONNECTIONS') {
-      return (<ListItem 
-        key={'friends-0'}
-        title='You have no friends.'
-        // leftAvatar={{ source: {uri: item.avatar_url }}}
-        containerStyle={styles.listItem}
-        hideChevron
-      />)
-    }
+    } 
     return null;
   }
 
@@ -60,8 +48,7 @@ class FindChillsScreen extends Component {
   );
 
   componentWillMount() {
-    this.getFriends();
-    this.getPending();
+    this.getAvailableChills();
   }
 
   render() {
@@ -72,40 +59,13 @@ class FindChillsScreen extends Component {
         <SectionList 
           sections = {
             [
-              // { 
-              //   title: 'ADD A CONNECTION',
-              //   data: [{ username: 'Add friend by username', id: 0 }],
-              //   keyExtractor: (item, index) => item + index,
-              //   renderItem: ({ item }) => (
-              //     <ListItem 
-              //       key={'add-' + item.id}
-              //       title={item.username}
-              //       // leftAvatar={{ source: {uri: item.avatar_url }}}
-              //       // onPress={() => navigate('AddFriend')}
-              //       onPress={() => navigate('AddFriend')}
-              //       containerStyle={styles.listItem}
-              //   />)
-              // },
-              // { 
-              //   title: 'PENDING CONNECTIONS',
-              //   data: this.props.reduxState.friends.pending,
-              //   keyExtractor: (item, index) => item + index,
-              //   renderItem: ({ item }) => (
-              //     <ListItem 
-              //       key={'pending-' + item.id}
-              //       title={item.username}
-              //       // leftAvatar={{ source: {uri: item.avatar_url }}}
-              //       onPress={() => navigate('AddFriend')}
-              //       containerStyle={styles.listItem}
-              //     />)
-              // },
               {
                 title: 'AVAILABLE CHILLS',
                 data: this.state.chills,
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'friends-' + item.id}
+                    key={'availableChills-' + item.id}
                     title={item.title}
                     subtitle={item.subtitle}
                     // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
