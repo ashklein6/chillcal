@@ -12,7 +12,7 @@ import moment from 'moment';
 
 class FindChillsScreen extends Component {
   static navigationOptions = {
-    title: 'FindChills',
+    title: 'Find Chills',
   };
 
   state = {

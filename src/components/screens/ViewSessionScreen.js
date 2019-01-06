@@ -5,7 +5,8 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 import moment from 'moment';
 
@@ -40,7 +41,17 @@ class ViewSessionScreen extends Component {
 
   cancelChill = () => {
     console.log('in cancel chill');
-    this.props.dispatch({ type: 'CANCEL_CHILL_FRIEND', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} });
+    Alert.alert(
+      'Cancel Chill',
+      `Are you sure you want to cancel your chill with ${this.state.friend}?`,
+      [
+        {text: 'Back', onPress: () => console.log('OK Pressed')},
+        {text: 'Cancel Chill', onPress: () => {
+          this.props.dispatch({ type: 'CANCEL_CHILL_FRIEND', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} })
+        } , style: 'cancel'},
+      ],
+      { cancelable: true }
+    )
   }
 
   cancelChillRequest = () => {
