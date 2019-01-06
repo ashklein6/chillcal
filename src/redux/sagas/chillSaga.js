@@ -1,6 +1,21 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import apiCall from '../../../apiCall';
 
+// worker saga: will be fired to cancel a chill that the user did not create
+function* cancelChillFriend(action) {
+  try {
+    // passes the id of the chill to be deleted
+    console.log('action.payload of cancelChillFriend:',action.payload);
+    yield apiCall({ method: 'PUT', url: `/api/chills/cancel`, data: action.payload })
+
+    // get user's scheduled chills and set in reduxState
+    yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
+
+  } catch (error) {
+      console.log('Error with canceling chill:', error);
+  }
+}
+
 // worker saga: will be fired to post new chill to database
 function* createChill(action) {
   try {
@@ -71,6 +86,7 @@ function* scheduledSaga() {
   yield takeLatest('FETCH_USERS_CHILLS', fetchUsersChills);
   yield takeLatest('REFRESH_USERS_CHILLS', refreshUsersChills);
   yield takeLatest('UPDATE_CHILL_DETAILS', updateChillDetails);
+  yield takeLatest('CANCEL_CHILL_FRIEND', cancelChillFriend);
 }
 
 export default scheduledSaga;
