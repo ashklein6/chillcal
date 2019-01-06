@@ -4,6 +4,7 @@ import loginMode from './loginModeReducer';
 import user from './userReducer';
 import friends from './friendsReducer';
 import scheduled from './scheduledReducer';
+import chill from './chillReducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   user, // will have an id and username if someone is logged in
   friends, // will have an array of a user's connections
   scheduled, // will have an array of a user's scheduled chills
+  chill, // will aid the creating of new chills
 });
 
 export default rootReducer;
