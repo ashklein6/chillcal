@@ -108,7 +108,7 @@ class UserScreen extends Component {
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'pending-' + item.id}
+                    key={'chill-' + item.id}
                     title={moment(item.start_time).format('dddd[,] MMM Do') == moment(item.end_time).format('dddd[,] MMM Do') ?
                       moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - '+moment(item.end_time).format('h:mm A') :
                       moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - \n'+moment(item.end_time).format('dddd[,] MMM Do h:mm A')}

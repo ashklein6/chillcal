@@ -29,14 +29,6 @@ class ChillsScreen extends Component {
     this.props.dispatch({ type: 'REFRESH_SCHEDULED_CHILLS', payload: {id: this.props.reduxState.user.id} })
   }
 
-  prepDate = (item) => {
-    if (moment(item.start_time).format("MMM Do YY") == moment(item.end_time).format("MMM Do YY")) {
-      return ( moment(item.start_time).format('dddd[,] MMM Do h:mm A') + ' - ' + moment(item.end_time).format('h:mm A') )
-    } else {
-      return ( moment(item.start_time).format('dddd[,] MMM Do h:mm A') + ' - \n' + moment(item.end_time).format('dddd[,] MMM Do h:mm A') )
-    }
-  }
-
   renderNoContent = ({ section }) => {
     if (section.data.length == 0) {
       return (<ListItem 
@@ -54,6 +46,16 @@ class ChillsScreen extends Component {
         <Text style={styles.sectionTitle}>{section.title}</Text>
     </View>
   );
+  
+  viewSession = (item) => {
+    const {navigate} = this.props.navigation;
+
+    if (item.created_user_id == this.props.reduxState.user.id) {
+      navigate('ManageSession', {item});
+    } else {
+      navigate('ViewSession', {item});
+    }
+  }
 
   componentWillMount() {
     this.getScheduledChills();
@@ -73,15 +75,17 @@ class ChillsScreen extends Component {
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'friends-' + item.id}
+                    key={'chill-' + item.id}
                     // title={moment(item.start_time).format('dddd[,] MMM Do h:mm A')}
-                    title={this.prepDate(item)}
+                    title={moment(item.start_time).format('dddd[,] MMM Do') == moment(item.end_time).format('dddd[,] MMM Do') ?
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - '+moment(item.end_time).format('h:mm A') :
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - \n'+moment(item.end_time).format('dddd[,] MMM Do h:mm A')}
                     subtitle={item.details + ' with ' + item.friend_username}
-                    // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
-                    onPress={() => navigate('Session', {item: item})}
-                    containerStyle={styles.listItem}
                     titleNumberOfLines={2}
                     subtitleNumberOfLines={4}
+                    // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
+                    onPress={() => this.viewSession(item)}
+                    containerStyle={styles.listItem}
                   />)
               }
             ]

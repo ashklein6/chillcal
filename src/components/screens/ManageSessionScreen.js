@@ -62,6 +62,8 @@ class ManageSessionScreen extends Component {
   }
 
   dateTimeStart = () => {
+    console.log('this.state.startDateTime:',this.state.startDateTime);
+    console.log('with moment:',moment(this.state.startDateTime).format('dddd[,] MMM Do h:mm A'))
       console.log('running dateTimeStart', this.state.startDateTime);
       if (this.state.startDateTime == '') {
           console.log('caught blank startDateTime');          
