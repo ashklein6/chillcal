@@ -3,6 +3,7 @@ import loginSaga from './loginSaga';
 import registrationSaga from './registrationSaga';
 import userSaga from './userSaga';
 import friendsSaga from './friendsSaga';
+import availableSaga from './availableSaga';
 import scheduledSaga from './scheduledSaga';
 import chillSaga from './chillSaga';
 
@@ -19,6 +20,7 @@ export default function* rootSaga() {
     registrationSaga(),
     userSaga(),
     friendsSaga(),
+    availableSaga(),
     scheduledSaga(),
     chillSaga(),
   ]);

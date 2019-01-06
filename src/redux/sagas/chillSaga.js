@@ -8,11 +8,28 @@ function* cancelChillFriend(action) {
     console.log('action.payload of cancelChillFriend:',action.payload);
     yield apiCall({ method: 'PUT', url: `/api/chills/cancel`, data: action.payload })
 
-    // get user's scheduled chills and set in reduxState
+    // get user's available and scheduled chills and set in reduxState
+    yield put({ type: 'FETCH_AVAILABLE_CHILLS', payload: action.payload });
     yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
 
   } catch (error) {
       console.log('Error with canceling chill:', error);
+  }
+}
+
+// worker saga: will be fired to cancel a chill request
+function* cancelChillRequest(action) {
+  try {
+    // passes the id of the request to be deleted
+    console.log('action.payload of cancelChillRequest:',action.payload);
+    yield apiCall({ method: 'DELETE', url: `/api/chills/request/decline/${action.payload.requestId}`})
+
+    // get user's available and scheduled chills and set in reduxState
+    yield put({ type: 'FETCH_AVAILABLE_CHILLS', payload: action.payload });
+    yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
+
+  } catch (error) {
+      console.log('Error with canceling chill request:', error);
   }
 }
 
@@ -67,6 +84,22 @@ function* refreshUsersChills(action) {
   }
 }
 
+// worker saga: will be fired to request to chill with friend
+function* requestToChill(action) {
+  try {
+    // passes the id of the chill the request is for
+    console.log('action.payload of requestToChill:',action.payload);
+    yield apiCall({ method: 'POST', url: `/api/chills/request`, data: action.payload })
+
+    // get user's available and scheduled chills and set in reduxState
+    yield put({ type: 'FETCH_AVAILABLE_CHILLS', payload: action.payload });
+    yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
+
+  } catch (error) {
+      console.log('Error with canceling chill:', error);
+  }
+}
+
 function* updateChillDetails(action) {
   try {
     // passes the current user id and the updated details of the chill
@@ -87,6 +120,8 @@ function* scheduledSaga() {
   yield takeLatest('REFRESH_USERS_CHILLS', refreshUsersChills);
   yield takeLatest('UPDATE_CHILL_DETAILS', updateChillDetails);
   yield takeLatest('CANCEL_CHILL_FRIEND', cancelChillFriend);
+  yield takeLatest('REQUEST_TO_CHILL', requestToChill);
+  yield takeLatest('CANCEL_CHILL_REQUEST', cancelChillRequest);
 }
 
 export default scheduledSaga;

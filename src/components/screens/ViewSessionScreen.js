@@ -24,12 +24,15 @@ class ViewSessionScreen extends Component {
     startDateTime: this.props.navigation.state.params.item.start_time || '',
     startDateTimePickerVisible: false,
     friend: this.props.navigation.state.params.item.friend_username || '',
+    requestId: this.props.navigation.state.params.item.request_id,
   };
 
   buttonClicked = () => {
     console.log('in buttonClicked')
     if (this.props.navigation.state.params.item.connection_id) {
       this.cancelChill();
+    } else if (this.props.navigation.state.params.item.request_from_id == this.props.reduxState.user.id) {
+      this.cancelChillRequest();
     } else {
       this.requestToChill();
     }
@@ -38,6 +41,11 @@ class ViewSessionScreen extends Component {
   cancelChill = () => {
     console.log('in cancel chill');
     this.props.dispatch({ type: 'CANCEL_CHILL_FRIEND', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} });
+  }
+
+  cancelChillRequest = () => {
+    console.log('in cancel chill request');
+    this.props.dispatch({ type: 'CANCEL_CHILL_REQUEST', payload: {id: this.props.reduxState.user.id, requestId: this.state.requestId} });
   }
 
   dateTimeEnd = () => {
@@ -90,7 +98,7 @@ class ViewSessionScreen extends Component {
   hideStartDateTimePicker = () => this.setState({ ...this.state, startDateTimePickerVisible: false });
 
   requestToChill = () => {
-    console.log('in request to chill');
+    this.props.dispatch({ type: 'REQUEST_TO_CHILL', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} });
   }
 
   showEndDateTimePicker = () => {
@@ -127,7 +135,10 @@ class ViewSessionScreen extends Component {
           </View> 
         </React.Fragment>
         : null }
-        <Button title={params.item.connection_id ? 'Cancel Chill': 'Request to Chill'} onPress={this.buttonClicked}/>
+        <Button title={params.item.connection_id ? 
+          'Cancel Chill': (params.item.request_from_id == this.props.reduxState.user.id ? 
+          'Cancel Chill Request' : 'Request to Chill')} onPress={this.buttonClicked}/>
+        <Text>{JSON.stringify(params.item)}</Text>
       </ScrollView>
     );
   }
