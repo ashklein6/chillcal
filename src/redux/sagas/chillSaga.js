@@ -4,7 +4,7 @@ import apiCall from '../../../apiCall';
 // worker saga: will be fired to post new chill to database
 function* createChill(action) {
   try {
-    // passes the current user id to get their scheduled chills
+    // passes the current user id and the details of the new chill
     console.log('action.payload of createChill:',action.payload);
     yield apiCall({ method: 'POST', url: `/api/chills`, data: action.payload })
 
@@ -52,10 +52,25 @@ function* refreshUsersChills(action) {
   }
 }
 
+function* updateChillDetails(action) {
+  try {
+    // passes the current user id and the updated details of the chill
+    console.log('action.payload of createChill:',action.payload);
+    yield apiCall({ method: 'PUT', url: `/api/chills/edit`, data: action.payload })
+
+    // get user's chills and set in reduxState
+    yield put({ type: 'FETCH_USERS_CHILLS', payload: action.payload });
+
+  } catch (error) {
+      console.log('Error with posting new chill:', error);
+  }
+}
+
 function* scheduledSaga() {
   yield takeLatest('CREATE_NEW_CHILL', createChill);
   yield takeLatest('FETCH_USERS_CHILLS', fetchUsersChills);
   yield takeLatest('REFRESH_USERS_CHILLS', refreshUsersChills);
+  yield takeLatest('UPDATE_CHILL_DETAILS', updateChillDetails);
 }
 
 export default scheduledSaga;

@@ -58,12 +58,30 @@ class UserScreen extends Component {
     </View>
   );
 
+  friendDisplay = () => {
+    const {params} = this.props.navigation.state;
+    if (params.item.requested_user_id === null) {
+        return (null);
+    } else {
+        if (params.item.friend_username != null) {
+            return  (<View>
+                        <Text style={styles.header}>FRIEND</Text>
+                        <TextInput 
+                            style={styles.input}
+                            value={this.state.friend}
+                            editable={false}
+                        />
+                    </View>)
+        }
+    }
+  }
   componentWillMount() {
     this.getUsersChills();
   }
 
   render() {
     const {navigate} = this.props.navigation;
+    console.log(this.props.reduxState.chill.usersChills);
 
     return (
       <View style={styles.container}>
@@ -91,8 +109,9 @@ class UserScreen extends Component {
                 renderItem: ({ item }) => (
                   <ListItem 
                     key={'pending-' + item.id}
-                    title={moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - '+
-                           moment(item.end_time).format('h:mm A')}
+                    title={moment(item.start_time).format('dddd[,] MMM Do') == moment(item.end_time).format('dddd[,] MMM Do') ?
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - '+moment(item.end_time).format('h:mm A') :
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - \n'+moment(item.end_time).format('dddd[,] MMM Do h:mm A')}
                     subtitle={item.details}
                     titleNumberOfLines={2}
                     // leftAvatar={{ source: {uri: item.avatar_url }}}
