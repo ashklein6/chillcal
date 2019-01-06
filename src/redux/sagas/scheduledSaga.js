@@ -16,27 +16,27 @@ function* fetchScheduled(action) {
   }
 }
 
-  // worker saga: will be fired to update both friends list and pending friends list
-  function* refreshScheduled(action) {
-    try {
-      // passes the current user id to get their connections
-      console.log('action.payload of refreshScheduled:');
-      let userId = action.payload.id;
+// worker saga: will be fired to update list of scheduled chills
+function* refreshScheduled(action) {
+  try {
+    // passes the current user id to get their connections
+    console.log('action.payload of refreshScheduled:');
+    let userId = action.payload.id;
 
-      // update status to refreshing
-      yield put({ type: 'REFRESH_SCHEDULED_START'})
+    // update status to refreshing
+    yield put({ type: 'REFRESH_SCHEDULED_START'})
 
-      // get scheduled chills and set in reduxState
-      yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
+    // get scheduled chills and set in reduxState
+    yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
 
-      // update status to indicate refreshing has completed
+    // update status to indicate refreshing has completed
+    yield put({ type: 'REFRESH_SCHEDULED_COMPLETE'})
+
+  } catch (error) {
       yield put({ type: 'REFRESH_SCHEDULED_COMPLETE'})
-  
-    } catch (error) {
-        yield put({ type: 'REFRESH_SCHEDULED_COMPLETE'})
-        console.log('Error with refreshing scheduled:', error);
-    }
+      console.log('Error with refreshing scheduled:', error);
   }
+}
 
 function* scheduledSaga() {
   yield takeLatest('FETCH_SCHEDULED_CHILLS', fetchScheduled);
