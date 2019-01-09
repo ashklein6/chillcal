@@ -8,6 +8,7 @@ import {
   Button,
   Alert
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import moment from 'moment';
 
 class ViewSessionScreen extends Component {
@@ -109,7 +110,19 @@ class ViewSessionScreen extends Component {
   hideStartDateTimePicker = () => this.setState({ ...this.state, startDateTimePickerVisible: false });
 
   requestToChill = () => {
-    this.props.dispatch({ type: 'REQUEST_TO_CHILL', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} });
+    Alert.alert(
+      'Request to Chill',
+      `Click SEND to let ${this.state.friend} know that you want to chill!`,
+      [
+        {text: 'Back', onPress: () => console.log('OK Pressed')},
+        {text: 'SEND', onPress: () => {
+          this.props.dispatch({ type: 'REQUEST_TO_CHILL', payload: {id: this.props.reduxState.user.id, chillsUsersId: this.state.chillsUsersId} });
+          this.props.navigation.dispatch(NavigationActions.back())
+        }},
+      ],
+      { cancelable: true }
+    )
+    
   }
 
   showEndDateTimePicker = () => {

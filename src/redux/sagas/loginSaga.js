@@ -1,4 +1,6 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import axios from 'axios';
+import { put, call, takeLatest } from 'redux-saga/effects';
+import reqUrl from '../../../serverReference';
 import apiCall from '../../../apiCall';
 
 // worker Saga: will be fired on "LOGIN" actions
@@ -15,14 +17,14 @@ function* loginUser(action) {
     // send the action.payload as the body
     // the config includes credentials which
     // allow the server session to recognize the user
-    yield apiCall({method: 'POST', url: '/api/user/login', data: action.payload, params: config});
+    yield call( axios.post, `${reqUrl}/api/user/login`, action.payload, config );
 
     // after the user has logged in
     // get the user information from the server
     yield put({type: 'FETCH_USER'});
   } catch (error) {
     console.log('Error with user login:', error);
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
       // The 401 is the error status sent from passport
       // if user isn't in the database or
       // if the username and password don't match in the database

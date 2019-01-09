@@ -22,7 +22,7 @@ export default async ({ url, method, data, params }) => {
 
   } catch (err) {
     console.log('inside catch of apiCall');
-
+ 
     if (err.response && err.response.data) {
       throw new Error(err.response.data.message)
     }
