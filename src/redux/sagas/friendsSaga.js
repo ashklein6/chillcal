@@ -1,6 +1,27 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import apiCall from '../../../apiCall';
 
+// worker saga will be fired to accept a friend request
+function* acceptFriendRequest(action) {
+  // passes the id of the user, the friend, the chill, and the chill request to be accepted
+  console.log('action.payload of acceptFriendRequest:',action.payload);
+  yield apiCall({ method: 'PUT', url: `/api/friends/accept/${action.payload.connectionId}` })
+  
+  // get user's pending chill requests and upcoming chills and set in reduxState
+  yield put({ type: 'FETCH_PENDING', payload: action.payload })
+  yield put({ type: 'FETCH_FRIENDS', payload: action.payload })
+}
+
+// worker saga will be fired to decline a friend request
+function* declineFriendRequest(action) {
+    // passes the id of the chill request to be accepted
+    console.log('action.payload of declineFriendRequest:',action.payload);
+    yield apiCall({ method: 'DELETE', url: `/api/friends/decline/${action.payload.connectionId}` });
+    
+    // get user's pending chill requests and set in reduxState
+    yield put({ type: 'FETCH_PENDING', payload: action.payload });
+}
+
 // worker saga: will be fired to retrieve list of friends
 function* fetchFriends(action) {
   try {
@@ -75,12 +96,30 @@ function* fetchPending(action) {
     }
   }
 
+  // worker saga: will be fired to send friend request 
+  function* sendFriendRequest(action) {
+    try {
+      // passes the id of the current user and the requested friend's id
+      console.log('action.payload of sendFriendRequest:',action.payload);
+      yield apiCall({ method: 'POST', url: `/api/friends`, data: action.payload })
+
+      // get user's available and scheduled chills and set in reduxState
+      yield put({ type: 'FETCH_FRIENDS', payload: action.payload });
+      yield put({ type: 'FETCH_PENDING', payload: action.payload });
+
+    } catch (error) {
+        console.log('Error with sending friend request:', error);
+    }
+  }
+
 function* friendsSaga() {
   yield takeLatest('FETCH_FRIENDS', fetchFriends);
   yield takeLatest('FETCH_PENDING', fetchPending);
   yield takeLatest('REFRESH_FRIENDS', refreshFriends);
   yield takeLatest('FETCH_FRIENDS_SEARCH', fetchFriendsSearch);
-
+  yield takeLatest('ACCEPT_FRIEND_REQUEST', acceptFriendRequest);
+  yield takeLatest('DECLINE_FRIEND_REQUEST', declineFriendRequest);
+  yield takeLatest('SEND_FRIEND_REQUEST', sendFriendRequest);
 }
 
 export default friendsSaga;

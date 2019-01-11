@@ -96,7 +96,7 @@ function* requestToChill(action) {
     yield put({ type: 'FETCH_SCHEDULED_CHILLS', payload: action.payload });
 
   } catch (error) {
-      console.log('Error with canceling chill:', error);
+      console.log('Error with sending chill request:', error);
   }
 }
 

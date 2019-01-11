@@ -7,8 +7,10 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Button
+  Button,
+  Alert
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
@@ -134,10 +136,15 @@ class ManageSessionScreen extends Component {
   hideStartDateTimePicker = () => this.setState({ ...this.state, startDateTimePickerVisible: false });
 
   saveChill = () => {
+    let startTime = this.state.startDateTime;
+    let endTime = this.state.endDateTime;
+    startTime.setHours(startTime.getHours() - 6);
+    endTime.setHours(endTime.getHours() - 6);
+
     console.log('in saveChill');
     let newChill = {
-      start_time: this.state.startDateTime,
-      end_time: this.state.endDateTime,
+      start_time: startTime,
+      end_time: endTime,
       details: this.state.details
     }
     this.props.dispatch({ type: 'UPDATE_CHILL_DETAILS', payload: {newChill: newChill, chillId: this.state.chillId, id: this.props.reduxState.user.id}})
@@ -151,6 +158,14 @@ class ManageSessionScreen extends Component {
       saveChill: this.saveChill, 
       edit: false
     });
+    Alert.alert(
+      'Chill Updated',
+      `Your ${this.state.details} chill has been updated!`,
+      [
+        {text: 'OK', onPress: () => this.props.navigation.dispatch(NavigationActions.back()) },
+      ],
+      { cancelable: true }
+    )
   }
 
   showEndDateTimePicker = () => {

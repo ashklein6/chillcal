@@ -5,7 +5,8 @@ import {
   View,
   StyleSheet,
   SectionList,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
@@ -17,6 +18,14 @@ class FriendsScreen extends Component {
   state = {
     
   };
+
+  acceptFriendRequest = (item) => {
+    this.props.dispatch({ type: 'ACCEPT_FRIEND_REQUEST', payload: {id: this.props.reduxState.user.id, connectionId: item.id} });
+  }
+
+  declineFriendRequest = (item) => {
+    this.props.dispatch({ type: 'DECLINE_FRIEND_REQUEST', payload: {id: this.props.reduxState.user.id, connectionId: item.id} });
+  }
 
   getFriends = () => {
     this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
@@ -59,6 +68,19 @@ class FriendsScreen extends Component {
     </View>
   );
 
+  respondToRequest = (item) => {
+    Alert.alert(
+      'Friend Request',
+      `Do you want to accept this friend request from ${item.username}?`,
+      [
+        {text: 'Accept', onPress: () => this.acceptFriendRequest(item) },
+        {text: 'Decline', onPress: () => this.declineFriendRequest(item) },
+        {text: 'Cancel', onPress: () => console.log('cancel pressed'), style: 'cancel'}
+      ],
+      { cancelable: true }
+    )
+  }
+
   componentWillMount() {
     this.getFriends();
     this.getPending();
@@ -95,7 +117,7 @@ class FriendsScreen extends Component {
                     key={'pending-' + item.id}
                     title={item.username}
                     // leftAvatar={{ source: {uri: item.avatar_url }}}
-                    onPress={() => navigate('AddFriend')}
+                    onPress={() => this.respondToRequest(item)}
                     containerStyle={styles.listItem}
                   />)
               },

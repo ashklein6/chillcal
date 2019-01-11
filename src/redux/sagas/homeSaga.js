@@ -1,7 +1,7 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import apiCall from '../../../apiCall';
 
-// worker saga will be fired to accept a friend request
+// worker saga will be fired to accept a chill request
 function* acceptChillRequest(action) {
   // passes the id of the user, the friend, the chill, and the chill request to be accepted
   console.log('action.payload of acceptChillRequest:',action.payload);
@@ -12,7 +12,7 @@ function* acceptChillRequest(action) {
   yield put({ type: 'FETCH_UPCOMING_CHILLS', payload: action.payload })
 }
 
-// worker saga will be fired to decline a friend request
+// worker saga will be fired to decline a chill request
 function* declineChillRequest(action) {
     // passes the id of the chill request to be accepted
     console.log('action.payload of declineChillRequest:',action.payload);

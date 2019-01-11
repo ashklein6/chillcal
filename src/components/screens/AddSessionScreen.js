@@ -7,9 +7,12 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 
 class AddSessionScreen extends Component {
   static navigationOptions = {
@@ -24,11 +27,13 @@ class AddSessionScreen extends Component {
     startDateTimePickerVisible: false,
   };
 
+  
+
   dateTimeEnd = () => {
     if (this.state.endDateTime == '') {
         return <Text style={styles.touchableOpacityText}>Click to set end day and time</Text>
     } else {
-        return <Text style={styles.enteredText}>{moment(this.state.endDateTime).format('dddd[,] MMM Do h:mm A')}</Text>
+        return <Text style={styles.enteredText}>{moment(this.state.endDateTime).utc().format('dddd[,] MMM Do h:mm A')}</Text>
     }
   }
 
@@ -39,11 +44,12 @@ class AddSessionScreen extends Component {
           return <Text style={styles.touchableOpacityText}>Click to set start day and time</Text>
       } else {
           console.log('caught', this.state.startDateTime);
-          return <Text style={styles.enteredText}>{moment(this.state.startDateTime).format('dddd[,] MMM Do h:mm A')}</Text>
+          return <Text style={styles.enteredText}>{moment(this.state.startDateTime).utc().format('dddd[,] MMM Do h:mm A')}</Text>
       }
   }
 
   handleEndDatePicked = (date) => {
+    date.setHours(date.getHours() - 6);
     console.log('A date has been picked: ', date);
     let newState = this.state;
     newState.endDateTime = date;
@@ -60,6 +66,7 @@ class AddSessionScreen extends Component {
   }
 
   handleStartDatePicked = (date) => {
+    date.setHours(date.getHours() - 6);
     console.log('A date has been picked: ', date);
     let newState = this.state;
     newState.startDateTime = date;
@@ -73,12 +80,22 @@ class AddSessionScreen extends Component {
 
   saveChill = () => {
     console.log('in saveChill');
+    const {navigate} = this.props.navigation;
+
     let newChill = {
       start_time: this.state.startDateTime,
       end_time: this.state.endDateTime,
       details: this.state.details
     }
     this.props.dispatch({ type: 'CREATE_NEW_CHILL', payload: {newChill: newChill, id: this.props.reduxState.user.id}})
+    Alert.alert(
+      'Chill created',
+      `Your ${this.state.details} chill has been created!`,
+      [
+        {text: 'OK', onPress: () => this.props.navigation.dispatch(NavigationActions.back()) },
+      ],
+      { cancelable: true }
+    )
   }
 
   showEndDateTimePicker = () => this.setState({ ...this.state, endDateTimePickerVisible: true });
