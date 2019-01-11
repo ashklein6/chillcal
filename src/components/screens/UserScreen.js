@@ -14,7 +14,7 @@ import moment from 'moment';
 class UserScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: 'User',
-    headerRight: <Button title='Settings' onPress={()=>{navigation.navigate('Settings')}} />
+    headerRight: <Button title='Tech' onPress={()=>{navigation.navigate('Settings')}} />
   });
   
   state = {
@@ -130,6 +130,12 @@ class UserScreen extends Component {
           }
           renderSectionFooter = {this.renderNoContent}
         />
+        <Button 
+          onPress = {() => {
+            console.log('log out clicked');
+            this.props.dispatch({ type: 'LOGOUT' })} }
+          title = 'Log Out'
+        />
       </View>
     );
   }
@@ -150,7 +156,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     marginLeft: 16,
     marginRight: 16,

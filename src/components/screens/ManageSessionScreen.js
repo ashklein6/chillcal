@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     opacity: 1.0
   },
   header: {
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     color: 'black',
     opacity: 0.8,

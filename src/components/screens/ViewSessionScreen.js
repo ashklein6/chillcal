@@ -162,7 +162,6 @@ class ViewSessionScreen extends Component {
         <Button title={params.item.connection_id ? 
           'Cancel Chill': (params.item.request_from_id == this.props.reduxState.user.id ? 
           'Cancel Chill Request' : 'Request to Chill')} onPress={this.buttonClicked}/>
-        <Text>{JSON.stringify(params.item)}</Text>
       </ScrollView>
     );
   }
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
     opacity: 1.0
   },
   header: {
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     color: 'black',
     opacity: 0.8,

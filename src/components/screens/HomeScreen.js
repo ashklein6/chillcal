@@ -96,6 +96,11 @@ class HomeScreen extends Component {
   componentWillMount() {
     this.getUpcomingChills();
     this.getChillRequests();
+    this.props.dispatch({ type: 'FETCH_PENDING', payload: {id: this.props.reduxState.user.id} });
+    this.props.dispatch({ type: 'FETCH_FRIENDS', payload: {id: this.props.reduxState.user.id} });
+    this.props.dispatch({ type: 'FETCH_SCHEDULED_CHILLS', payload: {id: this.props.reduxState.user.id} });
+    this.props.dispatch({ type: 'FETCH_AVAILABLE_CHILLS', payload: {id: this.props.reduxState.user.id} });
+    this.props.dispatch({ type: 'FETCH_USERS_CHILLS', payload: {id: this.props.reduxState.user.id} });
   }
 
   render() {
@@ -174,7 +179,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     marginLeft: 16,
     marginRight: 16,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import reqUrl from './serverReference';
 
 // made an apiCall function to connect to server
 export default async ({ url, method, data, params }) => {
@@ -7,12 +8,10 @@ export default async ({ url, method, data, params }) => {
   console.log('params', params);
 
   try {
-    const reqUrl = `http://192.168.1.18:5000${url}`; // home
-    // const reqUrl = `http://172.16.21.223:5000${url}`; // coffee shop
-    // const reqUrl = `http://10.100.100.56:5000${url}`; // prime
+    const axiosUrl = reqUrl + url;
     
     let response = await axios({
-      url: reqUrl,
+      url: axiosUrl,
       method,
       data,
       params
