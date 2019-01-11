@@ -6,6 +6,7 @@ import friendsSaga from './friendsSaga';
 import availableSaga from './availableSaga';
 import scheduledSaga from './scheduledSaga';
 import chillSaga from './chillSaga';
+import homeSaga from './homeSaga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     availableSaga(),
     scheduledSaga(),
     chillSaga(),
+    homeSaga(),
   ]);
 }

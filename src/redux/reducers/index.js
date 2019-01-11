@@ -6,6 +6,7 @@ import friends from './friendsReducer';
 import available from './availableReducer';
 import scheduled from './scheduledReducer';
 import chill from './chillReducer';
+import home from './homeReducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   available, // will have an array of a user's available chills
   scheduled, // will have an array of a user's scheduled chills
   chill, // will aid the creating of new chills
+  home, // includes chill requests and upcoming chills
 });
 
 export default rootReducer;
