@@ -30,6 +30,8 @@ This app was tested and developed on an iPhone 6s. Though it should boot on Andr
 <img src="screenshots/Login.PNG" width="300">     <img src="screenshots/Home.PNG" width="300">
 <img src="screenshots/AddSessionDateTime.PNG" width="300">     <img src="screenshots/RequestToChill.PNG" width="300">
 
+More screenshots are located in the `screenshots/` folder.
+
 ## Getting Started
 
 ### Prerequisites
