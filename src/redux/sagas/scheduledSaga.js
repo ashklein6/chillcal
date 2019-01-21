@@ -21,7 +21,6 @@ function* refreshScheduled(action) {
   try {
     // passes the current user id to get their connections
     console.log('action.payload of refreshScheduled:');
-    let userId = action.payload.id;
 
     // update status to refreshing
     yield put({ type: 'REFRESH_SCHEDULED_START'})

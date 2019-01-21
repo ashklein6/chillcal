@@ -58,6 +58,7 @@ class LoginForm extends Component {
             autoCapitalize="none"
             autoCorrect={false}
         />
+        <Text style={styles.message}>{this.props.errors.loginMessage == '' ? null : this.props.errors.loginMessage}</Text>
         <TouchableOpacity style={styles.buttonContainer} onPress={this.login}>
             <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
@@ -92,6 +93,10 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingHorizontal: 10,
         width: 'auto'
+    },
+    message: {
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 })
 

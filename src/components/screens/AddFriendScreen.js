@@ -5,8 +5,10 @@ import {
   View,
   StyleSheet,
   SectionList,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { ListItem, SearchBar } from 'react-native-elements';
 
 class AddFriendScreen extends Component {
@@ -17,6 +19,18 @@ class AddFriendScreen extends Component {
   state = {
     search: ''
   };
+
+  addFriend = (item) => {
+    Alert.alert(
+      'Add Friend',
+      `Do you want to send a friend request to ${item.username}?`,
+      [
+        {text: 'Send Request', onPress: () => this.sendRequest(item) },
+        {text: 'Cancel', onPress: () => console.log('cancel pressed'), style: 'cancel'}
+      ],
+      { cancelable: true }
+    )
+  }
 
   getFriendsSearch = () => {
     this.props.dispatch({ type: 'FETCH_FRIENDS_SEARCH', payload: {id: this.props.reduxState.user.id} });
@@ -37,6 +51,18 @@ class AddFriendScreen extends Component {
 
   onRefresh = () => {
     this.props.dispatch({ type: 'REFRESH_FRIENDS', payload: {id: this.props.reduxState.user.id} })
+  }
+  
+  sendRequest = (item) => {
+    this.props.dispatch({ type: 'SEND_FRIEND_REQUEST', payload: {id: this.props.reduxState.user.id, friendId: item.id} });
+    Alert.alert(
+      'Friend Request Sent',
+      `Your friend request to ${item.username} has been sent!`,
+      [
+        {text: 'OK', onPress: () => this.props.navigation.dispatch(NavigationActions.back()) },
+      ],
+      { cancelable: true }
+    )
   }
 
   renderNoContent = ({ section }) => {
@@ -77,7 +103,7 @@ class AddFriendScreen extends Component {
                     key={'add-' + item.id}
                     title={item.username}
                     // leftAvatar={{ source: {uri: item.avatar_url }}}
-                    // onPress={() => navigate('AddFriend')}
+                    onPress={() => this.addFriend(item)}
                     containerStyle={styles.listItem}
                 />)
               }
@@ -112,7 +138,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     marginLeft: 16,
     marginRight: 16,

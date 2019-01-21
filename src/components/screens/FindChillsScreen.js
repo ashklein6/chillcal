@@ -8,14 +8,15 @@ import {
   RefreshControl
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import moment from 'moment';
 
 class FindChillsScreen extends Component {
   static navigationOptions = {
-    title: 'FindChills',
+    title: 'Find Chills',
   };
 
   state = {
-    chills: [{title: 'November 30th - 8:00 AM - 8:45AM', subtitle: 'Coffee with Lauren'}, {title: 'December 2nd - 11:15 AM - 11:45 AM', subtitle: 'Lunch with Kaitlyn'}]
+
   };
 
   getAvailableChills = () => {
@@ -47,6 +48,16 @@ class FindChillsScreen extends Component {
     </View>
   );
 
+  viewSession = (item) => {
+    const {navigate} = this.props.navigation;
+
+    if (item.created_user_id == this.props.reduxState.user.id) {
+      navigate('ManageSession', {item});
+    } else {
+      navigate('ViewSession', {item});
+    }
+  }
+
   componentWillMount() {
     this.getAvailableChills();
   }
@@ -61,15 +72,20 @@ class FindChillsScreen extends Component {
             [
               {
                 title: 'AVAILABLE CHILLS',
-                data: this.state.chills,
+                data: this.props.reduxState.available.available,
                 keyExtractor: (item, index) => item + index,
                 renderItem: ({ item }) => (
                   <ListItem 
-                    key={'availableChills-' + item.id}
-                    title={item.title}
-                    subtitle={item.subtitle}
+                    key={'chill-' + item.id}
+                    // title={moment(item.start_time).format('dddd[,] MMM Do h:mm A')}
+                    title={moment(item.start_time).format('dddd[,] MMM Do') == moment(item.end_time).format('dddd[,] MMM Do') ?
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - '+moment(item.end_time).format('h:mm A') :
+                      moment(item.start_time).format('dddd[,] MMM Do h:mm A')+' - \n'+moment(item.end_time).format('dddd[,] MMM Do h:mm A')}
+                    subtitle={item.details + ' with ' + item.friend_username}
+                    titleNumberOfLines={2}
+                    subtitleNumberOfLines={4}
                     // leftAvatar={{ source: {uri: https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg }}}
-                    onPress={() => navigate('AddFriend')}
+                    onPress={() => this.viewSession(item)}
                     containerStyle={styles.listItem}
                   />)
               }
@@ -104,7 +120,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 24,
     marginBottom: 8,
     marginLeft: 16,
     marginRight: 16,
