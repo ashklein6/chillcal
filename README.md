@@ -52,7 +52,7 @@ To get a copy of chillcal running on your local machine:
 1. Install node modules using `npm install`.
 1. Start client with `expo start` in a separate terminal.
 1. Launch phone simulator from expo's browser window or navigate to project through expo's phone application.
-1. Follow steps of chillcal-api project to set up server. Update the url in `serverReference.js` to reflect server's location.
+1. Follow steps of [chillcal-api](https://github.com/ashklein6/chillcal-api) project to set up server. Update the url in `serverReference.js` to reflect server's location.
 
 ### Lay of the Land
 
