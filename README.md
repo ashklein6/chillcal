@@ -26,6 +26,10 @@ This app was tested and developed on an iPhone 6s. Though it should boot on Andr
 - [ ] Implement calendar view for chills
 - [ ] Implement message feature to discuss chill details
 
+## Screenshots
+<img src="screenshots/Login.PNG" width="300">     <img src="screenshots/Home.PNG" width="300">
+<img src="screenshots/AddSessionDateTime.PNG" width="300">     <img src="screenshots/RequestToChill.PNG" width="300">
+
 ## Getting Started
 
 ### Prerequisites
